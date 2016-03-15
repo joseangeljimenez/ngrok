@@ -101,6 +101,11 @@ func NewControl(ctlConn conn.Conn, authMsg *msg.Auth) {
 		return
 	}
 
+	if authMsg.User != opts.authToken {
+ 		failAuth(fmt.Errorf("Invalid authtoken %s", authMsg.User))
+ 		return
+ 	}
+
 	// register the control
 	if replaced := controlRegistry.Add(c.id, c); replaced != nil {
 		replaced.shutdown.WaitComplete()
